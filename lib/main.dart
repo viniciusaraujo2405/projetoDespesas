@@ -1,32 +1,30 @@
 
 import 'package:flutter/material.dart';
 import 'dart:math';
-import './components/transactions_form.dart';
-import './components/transactions_list.dart';
+
+import 'components/transactions_list.dart';
 import 'models/transaction.dart';
+import 'components/transactions_form.dart';
 
-
-main() => runApp(ExpensesApp());
+main() => runApp(const ExpensesApp());
 
 class ExpensesApp extends StatelessWidget {
-  @override 
-  Widget build(BuildContext context){
-    return MaterialApp(
-      home: MyHomePage(),
-
-
-    );
+  const ExpensesApp({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(home: MyHomePage());
   }
 }
 
 class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> _transactions = [
+  final _transactions = [
     Transaction(
       id: 't1',
       title: 'Novo Tênis de Corrida',
@@ -41,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ),
   ];
 
-  void _addTransaction(String title, double value) {
+  _addTransaction(String title, double value) {
     final newTransaction = Transaction(
       id: Random().nextDouble().toString(),
       title: title,
@@ -52,44 +50,48 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _transactions.add(newTransaction);
     });
-  }
-  _openTransactionFormModal(BuildContext context){
-    showModalBottomSheet(
-      context: context, 
-      builder: (_){
-        return TransactionsForm(_addTransaction);
-    });
+
+    Navigator.of(context).pop();
   }
 
-  @override 
-  Widget build(BuildContext context){
+  _openTransactionFormModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (_) {
+        return TransactionsForm(_addTransaction);
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:Text('Despesas Pessoais'),
-        actions: <Widget>[
+        title: const Text('Despesas Pessoais'),
+        actions: [
           IconButton(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             onPressed: () => _openTransactionFormModal(context),
           ),
         ],
-        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Container(
+          children: [
+            const SizedBox(
               child: Card(
-              color: Colors.blue,
-              child: Text('Gráfico'),
-              elevation: 5,
-            ),
+                color: Colors.blue,
+                child: Text('Gráfico'),
+                elevation: 5,
+              ),
             ),
             TransactionList(_transactions),
-            ],
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
         onPressed: () => _openTransactionFormModal(context),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
